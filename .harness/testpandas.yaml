@@ -1,0 +1,49 @@
+pipeline:
+  name: test-pandas
+  identifier: testpandas
+  projectIdentifier: DhrubaCI
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: dhrubaaccountconnector
+        repoName: pandas
+        build: <+input>
+  stages:
+    - stage:
+        name: bit linux
+        identifier: Bit_linux
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: docker builds
+                  identifier: docker_builds
+                  spec:
+                    shell: Sh
+                    command: |-
+                      docker pull quay.io/pypa/manylinux2014_i686
+                      docker run --platform linux/386 -v $(pwd):/pandas quay.io/pypa/manylinux2014_i686 \
+                      /bin/bash -xc cd pandas && \
+                      git config --global --add safe.directory /pandas && \
+                      /opt/python/cp38-cp38/bin/python -m venv ~/virtualenvs/pandas-dev && \
+                      . ~/virtualenvs/pandas-dev/bin/activate && \
+                      python -m pip install --no-deps -U pip wheel 'setuptools<60.0.0' && \
+                      python -m pip install versioneer[toml] && \
+                      python -m pip install cython numpy python-dateutil pytz pytest pytest-xdist pytest-asyncio>=0.17 hypothesis && \
+                      python setup.py build_ext -q -j1 && \
+                      python -m pip install --no-build-isolation --no-use-pep517 -e . && \
+                      python -m pip list && \
+                      export PANDAS_CI=1 && \
+                      pytest -m 'not slow and not network and not clipboard and not single_cpu' pandas --junitxml=test-data.xml
