@@ -35,7 +35,7 @@ pipeline:
                     command: |-
                       docker pull quay.io/pypa/manylinux2014_i686
                       docker run --platform linux/386 -v $(pwd):/pandas quay.io/pypa/manylinux2014_i686 \
-                      /bin/bash -xc cd pandas && \
+                      /bin/bash -xc "cd pandas && \
                       git config --global --add safe.directory /pandas && \
                       /opt/python/cp38-cp38/bin/python -m venv ~/virtualenvs/pandas-dev && \
                       . ~/virtualenvs/pandas-dev/bin/activate && \
@@ -46,4 +46,4 @@ pipeline:
                       python -m pip install --no-build-isolation --no-use-pep517 -e . && \
                       python -m pip list && \
                       export PANDAS_CI=1 && \
-                      pytest -m 'not slow and not network and not clipboard and not single_cpu' pandas --junitxml=test-data.xml
+                      pytest -m 'not slow and not network and not clipboard and not single_cpu' pandas --junitxml=test-data.xml"
