@@ -71,3 +71,4 @@ pipeline:
                     image: actions/checkout@v3
                     settings:
                       fetchdepth: "0"
+  allowStageExecutions: true
