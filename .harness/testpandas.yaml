@@ -64,11 +64,11 @@ pipeline:
             steps:
               - step:
                   type: Plugin
-                  name: Checkout
+                  name: Set up Conda
                   identifier: Checkout
                   spec:
                     connectorRef: account.harnessImage
-                    image: actions/checkout@v3
+                    image: continuumio/anaconda3
                     settings:
-                      fetchdepth: "0"
+                      uses: ./.github/actions/setup-conda
   allowStageExecutions: true
