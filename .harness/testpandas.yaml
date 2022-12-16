@@ -47,3 +47,27 @@ pipeline:
                       python -m pip list && \
                       export PANDAS_CI=1 && \
                       pytest -m 'not slow and not network and not clipboard and not single_cpu' pandas --junitxml=test-data.xml"
+    - stage:
+        name: asv bot
+        identifier: asv_bot
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Plugin
+                  name: Checkout
+                  identifier: Checkout
+                  spec:
+                    connectorRef: account.harnessImage
+                    image: actions/checkout@v3
+                    settings:
+                      fetchdepth: "0"
