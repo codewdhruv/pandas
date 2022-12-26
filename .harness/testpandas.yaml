@@ -71,4 +71,30 @@ pipeline:
                     image: continuumio/anaconda3
                     settings:
                       uses: ./.github/actions/setup-conda
+    - stage:
+        name: code-checks
+        identifier: codechecks
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Plugin
+                  name: Install Python
+                  identifier: Install_Python
+                  spec:
+                    connectorRef: DhrubajyotiDocker
+                    image: plugins/github-actions
+                    settings:
+                      uses: actions/setup-python@v4
+                      with:
+                        python-version: "3.9"
   allowStageExecutions: true
