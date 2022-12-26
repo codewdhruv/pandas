@@ -108,4 +108,42 @@ pipeline:
                       uses: pre-commit/action@v2.0.3
                       with:
                         extra_args: "--verbose --all-files"
+              - step:
+                  type: Plugin
+                  name: Set up Conda
+                  identifier: Set_up_Conda
+                  spec:
+                    connectorRef: DhrubajyotiDocker
+                    image: plugins/github-actions
+                    settings:
+                      uses: ./.github/actions/setup-conda
+              - step:
+                  type: Plugin
+                  name: Build Pandas
+                  identifier: Build_Pandas
+                  spec:
+                    connectorRef: DhrubajyotiDocker
+                    image: plugins/github-actions
+                    settings:
+                      uses: ./.github/actions/build_pandas
+              - step:
+                  type: Run
+                  name: Run checks
+                  identifier: Run_checks
+                  spec:
+                    shell: Sh
+                    command: ci/code_checks.sh <+matrix.deps>
+                  when:
+                    stageStatus: All
+                    condition: <+pipeline.stages.cond.spec.execution.steps.echo.status> == "SUCCEEDED"
+                  failureStrategies: []
+                  strategy:
+                    matrix:
+                      deps:
+                        - single-docs
+                        - code
+                        - doctests
+                        - docstrings
+                        - notebooks
+                      maxConcurrency: 1
   allowStageExecutions: true
