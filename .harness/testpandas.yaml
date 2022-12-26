@@ -145,7 +145,7 @@ pipeline:
                     shell: Sh
                     command: ci/code_checks.sh <+matrix.deps>
                   when:
-                    stageStatus: Success
+                    stageStatus: All
                   failureStrategies: []
                   strategy:
                     matrix:
