@@ -97,4 +97,15 @@ pipeline:
                       uses: actions/setup-python@v4
                       with:
                         python-version: "3.9"
+              - step:
+                  type: Plugin
+                  name: Run pre-commit
+                  identifier: Run_precommit
+                  spec:
+                    connectorRef: DhrubajyotiDocker
+                    image: plugins/download
+                    settings:
+                      uses: pre-commit/action@v2.0.3
+                      with:
+                        extra_args: "--verbose --all-files"
   allowStageExecutions: true
