@@ -112,6 +112,7 @@ pipeline:
                       when:
                         stageStatus: All
                       failureStrategies: []
+              - parallel:
                   - step:
                       type: Plugin
                       name: Set up Conda
