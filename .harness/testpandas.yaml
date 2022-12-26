@@ -109,6 +109,9 @@ pipeline:
                           uses: pre-commit/action@v2.0.3
                           with:
                             extra_args: "--verbose --all-files"
+                      when:
+                        stageStatus: All
+                      failureStrategies: []
                   - step:
                       type: Plugin
                       name: Set up Conda
@@ -118,6 +121,9 @@ pipeline:
                         image: plugins/github-actions
                         settings:
                           uses: ./.github/actions/setup-conda
+                      when:
+                        stageStatus: All
+                      failureStrategies: []
                   - step:
                       type: Plugin
                       name: Build Pandas
@@ -127,6 +133,9 @@ pipeline:
                         image: plugins/github-actions
                         settings:
                           uses: ./.github/actions/build_pandas
+                      when:
+                        stageStatus: All
+                      failureStrategies: []
               - step:
                   type: Run
                   name: Run checks
