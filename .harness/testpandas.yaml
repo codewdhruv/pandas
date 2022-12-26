@@ -86,6 +86,26 @@ pipeline:
             spec: {}
           execution:
             steps:
+              - step:
+                  type: Run
+                  name: Run checks
+                  identifier: Run_checks
+                  spec:
+                    shell: Sh
+                    command: ci/code_checks.sh <+matrix.deps>
+                  when:
+                    stageStatus: Success
+                    condition: <+pipeline.stages.cond.spec.execution.steps.echo.status> == "SUCCEEDED"
+                  failureStrategies: []
+                  strategy:
+                    matrix:
+                      deps:
+                        - single-docs
+                        - code
+                        - doctests
+                        - docstrings
+                        - notebooks
+                      maxConcurrency: 1
               - parallel:
                   - step:
                       type: Plugin
@@ -136,26 +156,6 @@ pipeline:
                       when:
                         stageStatus: All
                       failureStrategies: []
-              - step:
-                  type: Run
-                  name: Run checks
-                  identifier: Run_checks
-                  spec:
-                    shell: Sh
-                    command: ci/code_checks.sh <+matrix.deps>
-                  when:
-                    stageStatus: Success
-                    condition: <+pipeline.stages.cond.spec.execution.steps.echo.status> == "SUCCEEDED"
-                  failureStrategies: []
-                  strategy:
-                    matrix:
-                      deps:
-                        - single-docs
-                        - code
-                        - doctests
-                        - docstrings
-                        - notebooks
-                      maxConcurrency: 1
         variables:
           - name: ENV_FILE
             type: String
