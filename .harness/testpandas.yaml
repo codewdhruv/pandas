@@ -134,7 +134,7 @@ pipeline:
                     shell: Sh
                     command: ci/code_checks.sh <+matrix.deps>
                   when:
-                    stageStatus: All
+                    stageStatus: Success
                     condition: <+pipeline.stages.cond.spec.execution.steps.echo.status> == "SUCCEEDED"
                   failureStrategies: []
                   strategy:
