@@ -143,6 +143,9 @@ pipeline:
                   spec:
                     shell: Sh
                     command: ci/code_checks.sh <+matrix.deps>
+                    envVariables:
+                      ENV_FILE: environment.yml
+                      PANDAS_CI: "1"
                   when:
                     stageStatus: All
                   failureStrategies: []
@@ -155,8 +158,6 @@ pipeline:
                         - docstrings
                         - notebooks
                       maxConcurrency: 1
-          sharedPaths:
-            - environment.yml
         variables:
           - name: ENV_FILE
             type: String
