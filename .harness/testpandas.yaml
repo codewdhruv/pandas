@@ -74,7 +74,6 @@ pipeline:
     - stage:
         name: code-checks
         identifier: codechecks
-        description: ""
         type: CI
         spec:
           cloneCodebase: true
@@ -156,6 +155,8 @@ pipeline:
                         - docstrings
                         - notebooks
                       maxConcurrency: 1
+          sharedPaths:
+            - environment.yml
         variables:
           - name: ENV_FILE
             type: String
