@@ -1,0 +1,36 @@
+pipeline:
+  name: test-pandas-linux32
+  identifier: testpandaslinux32
+  projectIdentifier: NgLabs
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: gitconnectordhruba
+        repoName: pandas
+        build: <+input>
+  stages:
+    - stage:
+        name: pytest
+        identifier: pytest
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Action
+                  name: Checkout
+                  identifier: Checkout
+                  spec:
+                    uses: actions/checkout@v3
+                    with:
+                      fetch-depth: "0"
