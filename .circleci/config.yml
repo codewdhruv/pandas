@@ -1,22 +1,26 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  test-arm:
-    machine:
-      image: ubuntu-2004:202101-01
-    resource_class: arm.large
-    environment:
-      ENV_FILE: ci/deps/circle-38-arm64.yaml
-      PYTEST_WORKERS: auto
-      PATTERN: "not single_cpu and not slow and not network and not clipboard and not arm_slow and not db"
-      PYTEST_TARGET: "pandas"
-      PANDAS_CI: "1"
+  say-hello:
+    # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/configuration-reference/#executor-job
+    docker:
+      - image: cimg/base:stable
+    # Add steps to the job
+    # See: https://circleci.com/docs/configuration-reference/#steps
     steps:
       - checkout
-      - run: .circleci/setup_env.sh
-      - run: PATH=$HOME/miniconda3/envs/pandas-dev/bin:$HOME/miniconda3/condabin:$PATH ci/run_tests.sh
+      - run:
+          name: "Say hello"
+          command: "echo Hello, World!"
 
+# Orchestrate jobs using workflows
+# See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  test:
+  say-hello-workflow:
     jobs:
-      - test-arm
+      - say-hello
